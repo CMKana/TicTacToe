@@ -1,0 +1,11 @@
+#extend("base"):
+#export("body"):
+    <p>Logging out...</p>
+    <form id="logoutForm" action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="">
+    </form>
+    <script>
+        document.getElementById("logoutForm").submit();
+    </script>
+#endexport
+#endextend

@@ -1,0 +1,8 @@
+#extend("base"):
+#export("body"):
+    <h1>User Info:</h1>
+    Username: #(user.username)<br>
+    Password Hash: #(user.passwordHash)<br>
+    Is Admin: #(user.isAdmin)<br>
+#endexport
+#endextend

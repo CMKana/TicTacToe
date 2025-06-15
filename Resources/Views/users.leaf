@@ -1,0 +1,23 @@
+#extend("base"):
+#export("body"):
+    #if(currentUser):
+        <h1>Logged in as: #(currentUser.username)</h1>
+    #else:
+        <h1>Not logged in</h1>
+    #endif
+        
+    <h1>Users:</h1>
+    <ul>
+        #for(user in users):
+        <li>
+            <a href="/#(user.username)">#(user.username)</a>
+            #if(currentUser.isAdmin && user != currentUser):
+                | <form method="post" action="/users/#(user.id)/delete" style="display:inline;">
+                    <button type="submit" style="background:none; border:none; cursor:pointer;">🗑️Delete</button>
+                <form>
+            #endif
+        #endfor
+        </li>
+    </ul>
+#endexport
+#endextend

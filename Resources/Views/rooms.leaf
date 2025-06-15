@@ -1,0 +1,12 @@
+#extend("base"):
+#export("body"):
+    <h1>Rooms:</h1>
+    <ul>
+        <li>
+        #for(room in rooms):
+            #(room.playerX)
+        #endfor
+        </li>
+    </ul>
+#endexport
+#endextend

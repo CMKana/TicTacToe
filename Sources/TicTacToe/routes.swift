@@ -2,13 +2,15 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async throws in
-        try await req.view.render("index", ["title": "Hello Vapor!"])
+    app.get { req -> View in
+        let currentUser = req.auth.get(User.self)
+        return try await req.view.render("index", BaseContext(title: "TicTacToe",
+                                                              currentUser: currentUser))
     }
-
-    app.get("hello") { req async -> String in
-        "Hello, world!"
-    }
-
-    try app.register(collection: TodoController())
+    
+    // MARK: - User
+    try app.register(collection: UserController())
+    
+    // MARK: - Room
+    try app.register(collection: RoomController())
 }

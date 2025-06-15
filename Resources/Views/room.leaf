@@ -1,5 +1,5 @@
 #extend("base"):
 #export("body"):
-    <p>Welcome</p>
+    <h1>Room Info:</h1>
 #endexport
 #endextend

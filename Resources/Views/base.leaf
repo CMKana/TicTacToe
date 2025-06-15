@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head><title>#(title)</title></head>
+    
+    <body>
+        <header><nav>
+            <a href="/">[🏠Home]</a> |
+            <a href="/users">[👥Users]</a>
+            <a href="/rooms">[📦Rooms]</a>
+            <br>
+            #if(currentUser):
+                <a href="/#(currentUser.username)">
+                    #if(currentUser.isAdmin):
+                        [👑#(currentUser.username)]
+                    #else:
+                        [🫵#(currentUser.username)]
+                    #endif
+                </a> |
+                <a href="/logout">[🔒Logout]</a> |
+                <a href="/delete-account">[🗑️Delete Account]</a>
+            #else:
+                Not logged in |
+                <a href="/register">[🫆Register]</a> |
+                <a href="/login">[🔓Login]</a>
+            #endif
+            <br>
+            <form method="post" action="/rooms" style="display:inline;">
+                    <button type="submit" style="background:none; border:none; cursor:pointer;">[🆕Create Room]</button>
+            <form>
+        </nav></header>
+        <hr>
+        
+        #import("body")
+        
+        <hr>
+    </body>
+</html>
