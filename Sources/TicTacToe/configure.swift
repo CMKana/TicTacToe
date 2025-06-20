@@ -21,7 +21,8 @@ public func configure(_ app: Application) async throws {
     app.views.use(.leaf)
     
     // 🗄️ Fluent
-    app.databases.use(DatabaseConfigurationFactory.sqlite(.file("db.sqlite")),as: .sqlite)
+    let sqliteConfiguration = SQLiteConfiguration(storage: .file(path: "db.sqlite"), enableForeignKeys: true)
+    app.databases.use(.sqlite(sqliteConfiguration), as: .sqlite)
     app.migrations.add(CreateUser())
     app.migrations.add(CreateRoom())
     try await app.autoMigrate()

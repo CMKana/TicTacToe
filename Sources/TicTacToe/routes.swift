@@ -13,4 +13,9 @@ func routes(_ app: Application) throws {
     
     // MARK: - Room
     try app.register(collection: RoomController())
+    
+    struct BaseContext: Encodable {
+        let title: String
+        let currentUser: User?
+    }
 }

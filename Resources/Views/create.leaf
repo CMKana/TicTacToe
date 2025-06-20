@@ -1,0 +1,16 @@
+#extend("base"):
+#export("body"):
+    <form method="post" action="/create">
+        <label>Invite player:</label>
+        <select name="playerO">
+            <option value="">Open to anyone</option>
+            #for(user in users):
+                <option value="#(user.id)">#(user.username)</option>
+            #endfor
+        </select>
+        <br>
+        <br>
+        <button type="submit">Create Room</button>
+    </form>
+#endexport
+#endextend

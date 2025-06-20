@@ -2,9 +2,18 @@
 #export("body"):
     <h1>Rooms:</h1>
     <ul>
-        <li>
         #for(room in rooms):
-            #(room.playerX)
+        <li>
+            <a href="/rooms/#(room.id)">#(room.playerX.username)
+                #if(room.playerO.username):
+                    | #(room.playerO.username)
+                #endif
+            </a>
+            #if(currentUser.isAdmin):
+                | <form method="post" action="/rooms/#(room.id)/delete" style="display:inline;">
+                    <button type="submit" style="background:none; border:none; cursor:pointer;">🗑️Delete</button>
+                </form>
+            #endif
         #endfor
         </li>
     </ul>

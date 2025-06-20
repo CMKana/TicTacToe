@@ -7,6 +7,8 @@ struct CreateUser: AsyncMigration {
             .field("username", .string, .required)
             .field("passwordHash", .string, .required)
             .field("isAdmin", .bool, .required, .sql(.default("false")))
+            .field("wins", .int8, .sql(.default(0)))
+            .field("losses", .int8, .sql(.default(0)))
             .unique(on: "username")
             .create()
     }

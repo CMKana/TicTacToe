@@ -19,6 +19,12 @@ final class User: Model, @unchecked Sendable, ModelSessionAuthenticatable {
     @Field(key: "isAdmin")
     var isAdmin: Bool
     
+    @Field(key: "wins")
+    var wins: Int
+    
+    @Field(key: "losses")
+    var losses: Int
+    
     init() { }
 
     init(id: UUID? = nil, username: String, passwordHash: String) {
@@ -26,5 +32,7 @@ final class User: Model, @unchecked Sendable, ModelSessionAuthenticatable {
         self.username = username
         self.passwordHash = passwordHash
         self.isAdmin = false
+        self.wins = 0
+        self.losses = 0
     }
 }

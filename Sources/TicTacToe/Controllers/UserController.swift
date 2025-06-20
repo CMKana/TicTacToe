@@ -41,8 +41,7 @@ struct UserController: RouteCollection {
         routes.post("delete-account", use: deleteUser)
         
         routes.get("users", use: listUsers)
-        
-        routes.get(":user", use: user)
+        routes.get("users", ":user", use: listUser)
         
         routes.get("admin", use: adminForm)
         routes.post("admin", use: adminUser)
@@ -61,7 +60,7 @@ struct UserController: RouteCollection {
 
     func registerUser(req: Request) throws -> EventLoopFuture<Response> {
         let data = try req.content.decode(RegisterForm.self)
-
+        
         return User.query(on: req.db)
             .filter(\.$username == data.username)
             .first()
@@ -69,10 +68,10 @@ struct UserController: RouteCollection {
                 guard existing == nil else {
                     return req.eventLoop.makeSucceededFuture(req.redirect(to: "/register"))
                 }
-
+                
                 let passwordHash = SHA256.hash(data.password)
                 let currentUser = User(username: data.username, passwordHash: passwordHash)
-
+                
                 return currentUser.save(on: req.db).map {
                     req.auth.login(currentUser)
                     return req.redirect(to: "/users")
@@ -157,8 +156,7 @@ struct UserController: RouteCollection {
                                                       users: users))
     }
     
-    // MARK: - user
-    func user(req: Request) async throws -> View {
+    func listUser(req: Request) async throws -> View {
         let currentUser = req.auth.get(User.self)
         
         guard
@@ -209,7 +207,7 @@ struct UserController: RouteCollection {
         return req.redirect(to: "/users")
     }
     
-    // MARK: - admin delete
+    // MARK: - ADMIN DELETE
     func adminDeleteUser(req: Request) async throws -> Response {
         guard let admin = req.auth.get(User.self),
               admin.isAdmin
@@ -225,37 +223,43 @@ struct UserController: RouteCollection {
             throw Abort(.conflict, reason: "No user found but id was found")
         }
         
+        var userRooms = try await Room.query(on: req.db).all()
+        userRooms = userRooms.filter { $0.$playerX.id == user.id || $0.$playerO.id == user.id }
+        
+        try await userRooms.delete(on: req.db)
         try await user.delete(on: req.db)
         return req.redirect(to: "/users")
     }
+
+    // MARK: - CONTEXT
+    struct UserViewData {
+        let username: String
+    }
+
+    struct BaseContext: Encodable {
+        let title: String
+        let currentUser: User?
+    }
+
+    struct UsersContext: Encodable {
+        let title: String
+        let currentUser: User?
+        
+        let users: [User]
+    }
+
+    struct UserContext: Encodable {
+        let title: String
+        let currentUser: User?
+        
+        let user: User
+    }
 }
 
+// MARK: - EXTENSION
 extension SHA256 {
     static func hash(_ string: String) -> String {
         let digest = Crypto.SHA256.hash(data: Data(string.utf8))
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
-}
-
-struct UserViewData {
-    let username: String
-}
-
-struct BaseContext: Encodable {
-    let title: String
-    let currentUser: User?
-}
-
-struct UsersContext: Encodable {
-    let title: String
-    let currentUser: User?
-    
-    let users: [User]
-}
-
-struct UserContext: Encodable {
-    let title: String
-    let currentUser: User?
-    
-    let user: User
 }

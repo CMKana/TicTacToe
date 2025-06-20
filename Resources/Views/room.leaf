@@ -1,5 +1,54 @@
 #extend("base"):
 #export("body"):
-    <h1>Room Info:</h1>
+
+    <h2>Game Room</h2>
+    <p>X: #(room.playerX.username)</p>
+    <p>O: <span id="playerO">#(room.playerO.username)</span></p>
+    <br>
+    <p>Current turn: <span id="currentTurn">#(currentTurn.username)</span></p>
+
+    <div id="board" style="display: grid; grid-template-columns: repeat(3, 80px); gap: 5px;">
+        #for(cell in cells):
+            <div class="cell" data-index="#(cell.index)" style="width: 80px; height: 80px; border: 1px solid #000; text-align: center; font-size: 2em; line-height: 80px; cursor: pointer;">
+                #(cell.value)
+            </div>
+        #endfor
+    </div>
+
+    <script>
+        const socket = new WebSocket("ws://" + location.host + "/ws/rooms/#(room.id)");
+
+        socket.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            const board = message.board;
+            document.querySelectorAll(".cell").forEach((cell, i) => {
+                cell.textContent = board[i];
+            });
+
+            if (message.playerO) {
+                document.getElementById("playerO").textContent = message.playerO.username;
+            }
+            if (message.currentTurn) {
+                document.getElementById("currentTurn").textContent = message.currentTurn.username;
+            }
+            if (message.winner) {
+                alert("Player " + message.winner + " wins!");
+            }
+        };
+
+        document.querySelectorAll(".cell").forEach((cell, i) => {
+            cell.addEventListener("click", () => {
+                socket.send(JSON.stringify({ index: i }));
+            });
+        });
+
+        window.addEventListener("load", () => {
+            const board = "#(room.board)";
+            document.querySelectorAll(".cell").forEach((cell, i) => {
+                cell.textContent = board[i];
+            });
+        });
+    </script>
 #endexport
 #endextend

@@ -1,5 +1,23 @@
 #extend("base"):
 #export("body"):
-    <p>Welcome</p>
+    <h1>Welcome</h1>
+    <br>
+    <p>How to play:</p>
+    <ol>
+        <li>[Register] or [Login]</li>
+        <li>Create room via [Create Room] or join through [Rooms]</li>
+    </ol>
+    <br>
+    <p>How to create room:</p>
+    <ol>
+        <li>You must be signed in</li>
+        <li>While creating room you can choose — will room be open (everyone can join) or closed (only one user)</li>
+    </ol>
+    <br>
+    <p>How to join room:</p>
+    <ol>
+        <li>You must be signed in</li>
+        <li>If room in the rooms list is open for you — click on the room.</li>
+    </ol>
 #endexport
 #endextend

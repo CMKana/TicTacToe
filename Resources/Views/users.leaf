@@ -10,11 +10,11 @@
     <ul>
         #for(user in users):
         <li>
-            <a href="/#(user.username)">#(user.username)</a>
+            <a href="/users/#(user.username)">#(user.username)</a>
             #if(currentUser.isAdmin && user != currentUser):
                 | <form method="post" action="/users/#(user.id)/delete" style="display:inline;">
                     <button type="submit" style="background:none; border:none; cursor:pointer;">🗑️Delete</button>
-                <form>
+                </form>
             #endif
         #endfor
         </li>

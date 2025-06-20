@@ -5,9 +5,11 @@
     <body>
         <header><nav>
             <a href="/">[🏠Home]</a> |
-            <a href="/users">[👥Users]</a>
+            <a href="/users">[👥Users]</a> |
             <a href="/rooms">[📦Rooms]</a>
+            
             <br>
+            
             #if(currentUser):
                 <a href="/#(currentUser.username)">
                     #if(currentUser.isAdmin):
@@ -23,10 +25,10 @@
                 <a href="/register">[🫆Register]</a> |
                 <a href="/login">[🔓Login]</a>
             #endif
+            
             <br>
-            <form method="post" action="/rooms" style="display:inline;">
-                    <button type="submit" style="background:none; border:none; cursor:pointer;">[🆕Create Room]</button>
-            <form>
+            
+            <a href="/create">[🆕Create Room]</a>
         </nav></header>
         <hr>
         
